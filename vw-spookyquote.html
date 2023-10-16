@@ -54,10 +54,12 @@
     <p id="wrong"></p>    
     <script>
       // An array of correct answers
-      var correctAnswers = ["I see dead people", "We all go a little mad sometimes", "Whatever you do, don't fall asleep"];
+      var correctAnswers = ["I see dead people", "We all go a little mad sometimes.", "Whatever you do, don't fall asleep!","We all go a little mad sometimes", "Whatever you do dont fall asleep"].map(v => v.toLowerCase());
+      console.log(correctAnswers);
   
       // A function to check if the input phrase is one of the correct answers
       function checkAnswer() {
+
         // Get the input element and its value
         var input = document.getElementById("phrase");
         var phrase = input.value;
@@ -66,7 +68,7 @@
         var result = document.getElementById("result");
   
         // Check if the phrase is in the correct answers array
-        if (correctAnswers.includes(phrase)) {
+        if (correctAnswers.includes(phrase.toLowerCase())) {
           // If yes, display a positive message and store the user name in a file
           result.innerHTML = "Correct! Well done!";
           wrong.innerHTML = "";          
