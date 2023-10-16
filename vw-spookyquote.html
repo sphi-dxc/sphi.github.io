@@ -1,0 +1,98 @@
+<html>
+<head>
+  <style>
+    /* CSS code to style the page */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: orange;
+    }
+    h1 {
+      text-align: center;
+      color: white;
+    }
+    #container {
+      width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: white;
+      border-radius: 10px;
+    }
+    #question {
+      font-size: 20px;
+      font-weight: bold;
+    }
+    #phrase {
+      margin-top: 10px;
+      font-size: 20px;      
+    }
+    #submit {
+      margin-top: 10px;
+      font-size: 15px;        
+      display: block;
+    }
+    #result {
+      margin-top: 10px;
+      color: green;
+    }
+
+    #wrong {
+      color: red;
+      font-weight: bold;
+    }
+
+  </style>
+</head>
+<body>
+  <h1>Spooky Quote Hunt 👻</h1>
+  <div id="container">
+    <p id="question">Enter the phrase that you think is correct. <br>Then, click the Submit button.</p>
+
+    <input id="phrase" type="text" placeholder="Enter your answer here" size = "40">
+    <button id="submit" onclick="checkAnswer()">Submit</button>
+    <p id="result"></p>
+    <p id="wrong"></p>    
+    <script>
+      // An array of correct answers
+      var correctAnswers = ["I see dead people", "We all go a little mad sometimes", "Whatever you do, don't fall asleep"];
+  
+      // A function to check if the input phrase is one of the correct answers
+      function checkAnswer() {
+        // Get the input element and its value
+        var input = document.getElementById("phrase");
+        var phrase = input.value;
+  
+        // Get the result element
+        var result = document.getElementById("result");
+  
+        // Check if the phrase is in the correct answers array
+        if (correctAnswers.includes(phrase)) {
+          // If yes, display a positive message and store the user name in a file
+          result.innerHTML = "Correct! Well done!";
+          wrong.innerHTML = "";          
+          //storeUserName();
+        } else {
+          // If no, display a negative message and clear the input
+          result.innerHTML = "";
+          wrong.innerHTML = "Wrong! Try again!";
+          input.value = "";
+        }
+      }
+  
+      // A function to store the user name in a file
+      function storeUserName() {
+        // Prompt the user for their name
+        var userName = prompt("What is your name?");
+  
+        // Create a new XMLHttpRequest object
+        var xhr = new XMLHttpRequest();
+  
+        // Specify the request method and URL
+        xhr.open("POST", "store_user_name.php");
+  
+        // Send the user name as request data
+        xhr.send(userName);
+      }
+    </script>
+
+</body>
+</html>
