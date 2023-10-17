@@ -46,17 +46,26 @@
 <body>
   <h1>Spooky Quote Hunt 👻</h1>
   <div id="container">
-    <p id="question">Enter the phrase that you think is correct. <br>Then, click the Submit button.</p>
+    <p id="question">Enter the phrase that you think is correct. <br>Then, click the Submit button or press Enter.</p>
 
-    <input id="phrase" type="text" placeholder="Enter your answer here" size = "40">
-    <button id="submit" onclick="checkAnswer()">Submit</button>
+    <form onsubmit="checkAnswer(); return false;">
+      <input id="phrase" type="text" placeholder="Enter your answer here" size = "40">
+      <button type="submit" id="submit" onclick="checkAnswer()">Submit</button>
+    </form>
     <p id="result"></p>
     <p id="wrong"></p>    
     <script>
       // An array of correct answers
       var correctAnswers = ["I see dead people", "We all go a little mad sometimes.", "Whatever you do, don't fall asleep!","Hi, I'm Chucky. Wanna play?","We all go a little mad sometimes", "Whatever you do dont fall asleep","Hi I'm Chucky Wanna play"].map(v => v.toLowerCase());
-      console.log(correctAnswers);
-  
+      
+      // An array of responses for correct answer
+      var correctResponse = ["Congratulations! You figured it out! 🥳", "You were not tricked, give yourself a treat! Great hunting! 👍", "Such a wise person! You solved the puzzles! 👏"];
+      
+      // An array of responses for wrong answer
+      var wrongResponse = ["You're dead... wrong! Better luck next time! 😜", "Boo hoo, sorry that ain't the answer! 🤡", "That was a bust! Better try again. 🤭","Congratulations! You have to try again! Hahahahaha 🤣", "Game not over, wanna play again? 🤔"];
+
+      var randomResponse = "";
+
       // A function to check if the input phrase is one of the correct answers
       function checkAnswer() {
 
@@ -70,18 +79,34 @@
         // Check if the phrase is in the correct answers array
         if (correctAnswers.includes(phrase.toLowerCase())) {
           // If yes, display a positive message and store the user name in a file
-          result.innerHTML = "Correct! Well done!";
+          
+          // Get a random index from the list
+          var randomIndex = Math.floor(Math.random() * correctResponse.length);
+          console.log(correctResponse.length);
+          console.log(randomIndex);
+          // Get a random word from the array at that index
+          var randomResponse = correctResponse[randomIndex];
+
+          result.innerHTML = randomResponse;
           wrong.innerHTML = "";          
           //storeUserName();
+
         } else {
           // If no, display a negative message and clear the input
+
+          // Get a random index from the list
+          var randomIndex = Math.floor(Math.random() * wrongResponse.length);
+          // Get a random word from the array at that index
+          var randomResponse = wrongResponse[randomIndex];
+
           result.innerHTML = "";
-          wrong.innerHTML = "Wrong! Try again!";
+          wrong.innerHTML = randomResponse;
           input.value = "";
         }
       }
   
       // A function to store the user name in a file
+      /*
       function storeUserName() {
         // Prompt the user for their name
         var userName = prompt("What is your name?");
@@ -94,7 +119,7 @@
   
         // Send the user name as request data
         xhr.send(userName);
-      }
+      }*/
     </script>
 
 </body>
