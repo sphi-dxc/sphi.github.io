@@ -1,6 +1,8 @@
 <html>
 <head>
   <title>👻 Spooky Quote Hunt</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
   <style>
     /* CSS code to style the page */
     body {
@@ -18,7 +20,7 @@
       background-color: white;
       border-radius: 10px;
     }
-    #question {
+    #question, #congrats {
       font-size: 20px;
       font-weight: bold;
     }
@@ -26,6 +28,10 @@
       margin-top: 10px;
       font-size: 20px;      
     }
+    #inputName, #inputEmail {
+      margin-top: 5px;
+      font-size: 18px;      
+    }    
     #submit {
       margin-top: 10px;
       font-size: 15px;        
@@ -34,13 +40,16 @@
     #result {
       margin-top: 10px;
       color: green;
+      font-weight: bold;
     }
 
     #wrong {
       color: red;
       font-weight: bold;
     }
-
+    #form2 {
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -50,13 +59,25 @@
 
     <form onsubmit="checkAnswer(); return false;">
       <input id="phrase" type="text" placeholder="Enter your answer here" size = "40">
-      <button type="submit" id="submit" onclick="checkAnswer()">Submit</button>
+      <button type="submit" id="submit">Submit</button>
     </form>
     <p id="result"></p>
-    <p id="wrong"></p>    
+    <p id="wrong"></p>
+
+    <div id="form2">
+      <p id="congrats">Let your name be known!</p>
+      <form onsubmit="postToGoogle(); return false;">
+        <input type="text" id="inputName" name="name" placeholder="Enter your name here" size = "40"><br>
+        <input type="email" id="inputEmail" name="email" placeholder="Enter your email here" size = "40"><br>
+        <button type="submit" id="submit">Submit</button>
+      </form>
+    
+    </div>
+    
     <script>
+
       // An array of correct answers
-      var correctAnswers = ["I see dead people", "We all go a little mad sometimes.", "Whatever you do, don't fall asleep!","Hi, I'm Chucky. Wanna play?","We all go a little mad sometimes", "Whatever you do dont fall asleep","Hi I'm Chucky Wanna play"].map(v => v.toLowerCase());
+      var correctAnswers = ["I see dead people", "We all go a little mad sometimes.", "Whatever you do, don't fall asleep!","Hi, I'm Chucky. Wanna play?","We all go a little mad sometimes", "Whatever you do dont fall asleep","Hi Im Chucky Wanna play"].map(v => v.toLowerCase());
       
       // An array of responses for correct answer
       var correctResponse = ["Congratulations! You figured it out! 🥳", "You were not tricked, give yourself a treat! Great hunting! 👍", "Such a wise person! You solved the puzzles! 👏"];
@@ -77,19 +98,23 @@
         var result = document.getElementById("result");
   
         // Check if the phrase is in the correct answers array
+        // If yes, display a positive message and store the user name in a file
         if (correctAnswers.includes(phrase.toLowerCase())) {
-          // If yes, display a positive message and store the user name in a file
-          
+         
           // Get a random index from the list
           var randomIndex = Math.floor(Math.random() * correctResponse.length);
-          console.log(correctResponse.length);
-          console.log(randomIndex);
+
           // Get a random word from the array at that index
           var randomResponse = correctResponse[randomIndex];
 
+          // Show results
           result.innerHTML = randomResponse;
           wrong.innerHTML = "";          
-          //storeUserName();
+
+          // Record name in leaderboard
+          //storePlayerName(phrase);
+          document.getElementById("form2").style.display = "block";
+          
 
         } else {
           // If no, display a negative message and clear the input
@@ -99,28 +124,90 @@
           // Get a random word from the array at that index
           var randomResponse = wrongResponse[randomIndex];
 
+          // Show results
           result.innerHTML = "";
           wrong.innerHTML = randomResponse;
           input.value = "";
         }
       }
   
-      // A function to store the user name in a file
-      /*
-      function storeUserName() {
+      // A function to store the user name in a file    
+      function storePlayerName(varAnswer, varName, varEmail) {
         // Prompt the user for their name
-        var userName = prompt("What is your name?");
+        var varName = prompt("Enter your name");
+        //var varEmail = prompt("Enter your email address");
   
-        // Create a new XMLHttpRequest object
-        var xhr = new XMLHttpRequest();
-  
-        // Specify the request method and URL
-        xhr.open("POST", "store_user_name.php");
-  
-        // Send the user name as request data
-        xhr.send(userName);
-      }*/
-    </script>
+        var qName = "entry.1493496092";
+        //var qEmail = "entry.2061552368";
 
+        var qAnswer = "entry.467362799";
+
+        //var baseURL = 'https://docs.google.com/forms/u/0/d/e/1FAIpQLSdb3MX-ITer47EMlcotLT_gPTm0W3HzKgDvKEuUYCXcxxMeAg/formResponse?';
+
+
+        var baseURL = 'https://docs.google.com/forms/d/1FAIpQLSdb3MX-ITer47EMlcotLT_gPTm0W3HzKgDvKEuUYCXcxxMeAg/formResponse?';
+        var submitRef = '&submit=Submit';
+
+        //var submitURL = (baseURL + qName + "=" + varName + "&" + qEmail + "=" + varEmail + submitRef);
+        var submitURL = (baseURL + qName + "=" + varName + qAnswer + "=" + varAnswer + submitRef);
+
+        console.log(submitURL);
+        $(this)[0].action=submitURL;
+
+      }
+
+      function postToGoogle() {
+        // Prompt the user for their name
+        //var varName = prompt("Enter your name");
+        //var varEmail = prompt("Enter your email address");
+
+        var input1 = document.getElementById("phrase");
+        var input2 = document.getElementById("inputName");
+        var input3 = document.getElementById("inputEmail");
+
+        var varAnswer = input1.value;
+        var varName = input2.value;
+        var varEmail = input3.value;
+
+        $.ajax({
+          //url: "https://docs.google.com/forms/u/0/d/e/1FAIpQLSdb3MX-ITer47EMlcotLT_gPTm0W3HzKgDvKEuUYCXcxxMeAg/formResponse",
+          url: "https://docs.google.com/forms/d/e/1FAIpQLSdb3MX-ITer47EMlcotLT_gPTm0W3HzKgDvKEuUYCXcxxMeAg/formResponse",
+          data: {
+            /* Get the entry IDs from the form's HTML
+            (...)",null,0,[[924752166,null,0]](...)
+            (...)",null,0,[[997497831,null,0]](...)
+            */
+            "entry.1493496092": varName,
+            "entry.2061552368": varEmail,
+            "entry.467362799": varAnswer
+          },
+          type: "POST",
+          dataType: "xml",
+          statusCode: {
+            0: function() {
+              //Success message
+              alert("Legendary!");
+            },
+            200: function() {
+              //Success Message
+              alert("Legendary!");
+            }
+          }
+        });
+      }
+
+      /*
+      $(document).ready(function() {
+        $('#form').submit(function() {
+          postToGoogle();
+          return false;
+        });
+      });
+      */
+
+//https://docs.google.com/forms/d/e/1FAIpQLSdb3MX-ITer47EMlcotLT_gPTm0W3HzKgDvKEuUYCXcxxMeAg/viewform?usp=pp_url&entry.1493496092=nnn&entry.2061552368=eee&entry.467362799=remember"
+
+    </script>
+  </div>
 </body>
 </html>
