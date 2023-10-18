@@ -57,7 +57,7 @@
   <div id="container">
     <p id="question">Enter the phrase that you think is correct. <br>Then, click the Submit button or press Enter.</p>
 
-    <form onsubmit="checkAnswer(); return false;">
+    <form id="answerBox" onsubmit="checkAnswer(); return false;">
       <input id="phrase" type="text" placeholder="Enter your answer here" size = "40">
       <button type="submit" id="submit">Submit</button>
     </form>
@@ -111,8 +111,9 @@
           result.innerHTML = randomResponse;
           wrong.innerHTML = "";          
 
-          // Record name in leaderboard
-          //storePlayerName(phrase);
+          // Prompt user to record name in leaderboard
+          document.getElementById("inputName").innerHTML = "";
+          document.getElementById("inputEmail").innerHTML = "";          
           document.getElementById("form2").style.display = "block";
           
 
@@ -131,35 +132,8 @@
         }
       }
   
-      // A function to store the user name in a file    
-      function storePlayerName(varAnswer, varName, varEmail) {
-        // Prompt the user for their name
-        var varName = prompt("Enter your name");
-        //var varEmail = prompt("Enter your email address");
-  
-        var qName = "entry.1493496092";
-        //var qEmail = "entry.2061552368";
-
-        var qAnswer = "entry.467362799";
-
-        //var baseURL = 'https://docs.google.com/forms/u/0/d/e/1FAIpQLSdb3MX-ITer47EMlcotLT_gPTm0W3HzKgDvKEuUYCXcxxMeAg/formResponse?';
-
-
-        var baseURL = 'https://docs.google.com/forms/d/1FAIpQLSdb3MX-ITer47EMlcotLT_gPTm0W3HzKgDvKEuUYCXcxxMeAg/formResponse?';
-        var submitRef = '&submit=Submit';
-
-        //var submitURL = (baseURL + qName + "=" + varName + "&" + qEmail + "=" + varEmail + submitRef);
-        var submitURL = (baseURL + qName + "=" + varName + qAnswer + "=" + varAnswer + submitRef);
-
-        console.log(submitURL);
-        $(this)[0].action=submitURL;
-
-      }
-
       function postToGoogle() {
-        // Prompt the user for their name
-        //var varName = prompt("Enter your name");
-        //var varEmail = prompt("Enter your email address");
+        // Prompt the user for name and email
 
         var input1 = document.getElementById("phrase");
         var input2 = document.getElementById("inputName");
@@ -169,14 +143,10 @@
         var varName = input2.value;
         var varEmail = input3.value;
 
+        // Post to Google Forms
         $.ajax({
-          //url: "https://docs.google.com/forms/u/0/d/e/1FAIpQLSdb3MX-ITer47EMlcotLT_gPTm0W3HzKgDvKEuUYCXcxxMeAg/formResponse",
           url: "https://docs.google.com/forms/d/e/1FAIpQLSdb3MX-ITer47EMlcotLT_gPTm0W3HzKgDvKEuUYCXcxxMeAg/formResponse",
           data: {
-            /* Get the entry IDs from the form's HTML
-            (...)",null,0,[[924752166,null,0]](...)
-            (...)",null,0,[[997497831,null,0]](...)
-            */
             "entry.1493496092": varName,
             "entry.2061552368": varEmail,
             "entry.467362799": varAnswer
@@ -186,26 +156,21 @@
           statusCode: {
             0: function() {
               //Success message
-              alert("Legendary!");
+              alert("Legendary move!");
             },
             200: function() {
               //Success Message
-              alert("Legendary!");
+              alert("Legendary move!");
             }
           }
         });
+
+        //Reset page
+        document.getElementById("form2").style.display = "none";
+        document.getElementById("answerBox").reset();
+        document.getElementById("result").innerHTML = "";
+        
       }
-
-      /*
-      $(document).ready(function() {
-        $('#form').submit(function() {
-          postToGoogle();
-          return false;
-        });
-      });
-      */
-
-//https://docs.google.com/forms/d/e/1FAIpQLSdb3MX-ITer47EMlcotLT_gPTm0W3HzKgDvKEuUYCXcxxMeAg/viewform?usp=pp_url&entry.1493496092=nnn&entry.2061552368=eee&entry.467362799=remember"
 
     </script>
   </div>
