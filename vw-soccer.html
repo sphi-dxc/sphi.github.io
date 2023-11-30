@@ -110,7 +110,7 @@ h2 {
 
 }
 
-.pts-shadow {
+.pts-shadow, .time-shadow {
     font-family: 'Digital Display',monospace;
     font-size: 11em;
     text-align: center;
@@ -126,7 +126,7 @@ h2 {
 }
 
 .pts {
-    font-family: 'Digital Display',monospace;
+    font-family: 'Digital Display', monospace;
     font-size: 11em;
     text-align: end;
 
@@ -191,7 +191,7 @@ a {
 
 .timerBox {
     position: relative;
-    width: 23em;
+    width: 26em;
     height: 10em;
 
     margin-bottom: 30px;
@@ -200,7 +200,7 @@ a {
 
 
 .timer {
-    font-family: 'Digital Display',monospace;
+    font-family: 'Digital Display', monospace;
     font-size: 11em;
     text-align: end;
 
@@ -224,12 +224,13 @@ a {
     <div class="time-container">
         <h2 class="text">TIME</h2>
           <div class="timerBox">
-             <p class="timer"><span class="js-timeout">5:00</span></p>
-             <p class="pts-shadow">0:00</p>
+             <p class="timer"><span class="js-timeout">10:00</span></p>
+             <p class="time-shadow">00:00</p>
           </div>
           <div class="two">
             <button id="js-startTimer">▶</button>
-            <button id="js-resetTimer">⬜</button>
+            <button id="js-resetTimer">⚪</button>
+            <button id="js-settings">⌚</button>
          </div>          
          <div class="two">
             <p><br\></p>
@@ -274,21 +275,24 @@ a {
 
     </div>
  </div>
- <footer>
-    <p class="footer">Based from code by <a href="https://github.com/praxeds">Juliana Praxedes</a> and <a href="https://codepen.io/crturcan">Can Turcan</a></p>
- </footer>
 
+ <!--
+<footer>
+    <p class="footer">Based from code by <a href="https://github.com/praxeds">Juliana Praxedes</a> and <a href="https://codepen.io/crturcan">Can Turcan</a></p>
+</footer>
+-->
 
 </body>
 
 <script type="text/javascript">
   var interval;  
   let homePts=document.getElementById("home-pts")
-  let homeCount=0
+  let homeCount=0;
   
 
   let guestPts=document.getElementById("guest-pts")
-  let guestCount=0
+  let guestCount=0;
+  let varTime="5:00";
 
   function homeAddPoint() {
       homeCount=homeCount+1
@@ -406,8 +410,6 @@ function guestScoreReset() {
   }
 
 
-
-
 function countdown() {
   clearInterval(interval);
   interval = setInterval( function() {
@@ -429,13 +431,36 @@ function countdown() {
   }, 1000);
 }
 
+
+
+$('#js-settings').click(function () {
+    var varInput = prompt("Type time in mm:ss format:");
+    varTime = varInput;
+      
+    $('.js-timeout').text(varTime);
+
+    if (varTime.length == 4) {
+        $('.time-shadow').text("0:00");
+        $('.timerBox').width("23em");
+    }
+    else {
+        $('.time-shadow').text("00:00");
+        $('.timerBox').width("26em");
+    }
+
+});
+
+
 $('#js-startTimer').click(function () {
-  $('.js-timeout').text("5:00");
+  $('.js-timeout').text(varTime);
   countdown();
 });
 
+
 $('#js-resetTimer').click(function () {
-  $('.js-timeout').text("5:00");
+  $('.js-timeout').text("10:00");
+  $('.time-shadow').text("00:00");
+  $('.timerBox').width("26em");
   clearInterval(interval);
 });
 
@@ -445,16 +470,3 @@ $('#js-resetTimer').click(function () {
 
 
 </html>
-
-
-<!--
-    <h1 class="text"></h1>
-    <div class="time-container">
-      <h2 class="text">TIME</h2>
-        <div class="timerBox">
-           <p class="timer"><span class="js-timeout">2:00</span></p>
-           <p class="pts-shadow">0:00</p>
-        </div>
-    </div>
-
--->
